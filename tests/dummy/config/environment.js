@@ -5,6 +5,8 @@ module.exports = function(environment) {
     modulePrefix: 'dummy',
     environment,
     rootURL: '/',
+    rootApiURL: 'http://localhost:4000',
+    apiNamespace: 'api/v1',
     locationType: 'auto',
     EmberENV: {
       FEATURES: {
@@ -23,12 +25,22 @@ module.exports = function(environment) {
     }
   };
 
+
+  ENV.contentSecurityPolicy = {
+    // ... other stuff here
+    'connect-src': "'self'  'http://freegeoip.net"
+  }
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
+
+    ENV['ember-cli-mirage'] = {
+      enabled: false
+    };
   }
 
   if (environment === 'test') {
@@ -44,8 +56,9 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    // Allow ember-cli-addon-docs to update the rootURL in compiled assets
+    ENV.rootURL = 'ADDON_DOCS_ROOT_URL';
     // here you can enable a production-specific feature
   }
-
   return ENV;
 };

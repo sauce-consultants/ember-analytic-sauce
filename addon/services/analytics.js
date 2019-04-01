@@ -9,12 +9,15 @@ import {
   get,
   set,
 } from '@ember/object';
+import Ember from 'ember';
+
 
 export default Service.extend({
   // Attributes
-  url: 'https://firestore.googleapis.com/v1/projects/2FL8YYkdkiMNQJyJdV6bhc/databases/(default)/documents',
+  url: 'https://sheetsu.com/apis/v1.0bu/6498441a3194/',
   viewSequence: 0,
   eventSequence: 0,
+  user: null,
   // Services
   browser: service(),
   // Computed
@@ -22,58 +25,74 @@ export default Service.extend({
     return get(this, 'viewSequence') + get(this, 'eventSequence');
   }),
   // Methods
-  trackView(options = {}) {
-    window.console.log('Track View', get(this, 'browser.info'));
+  init() {
+    this._super(...arguments);
+    const session = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+    set(this, 'session', session);
+  },
+  baseProperties() {
+    const row = {};
+    // ember app details
+    set(row, 'environment', get(config, 'environment'));
+    set(row, 'project', get(config, 'APP.name'));
+    // package version
+    const v = get(config, 'APP.version').split('+');
+    set(row, 'version', v[0]);
+    set(row, 'hash', v[1]);
+    // System setting
+    set(row, 'os', get(this, 'browser.info.os'));
+    set(row, 'ip', null); //get(this, 'browser').lookup('ip'));
+    // Browser details
+    set(row, 'browser', get(this, 'browser.info.browser.browserCode'));
+    set(row, 'browser-version', get(this, 'browser.info.browser.version'));
+    // User details
+    set(row, 'session', get(this, 'session'));
+    set(row, 'user', get(this, 'user'));
+    // date
+    const date = new Date();
+    set(row, 'date', date.toISOString());
+    return row;
+  },
+  trackView(view, title) {
+    window.console.log('Track View');
+
+    const row = this.baseProperties();
 
     this.incrementProperty('viewSequence');
+    set(row, 'view-sequence', get(this, 'viewSequence'));
+    set(row, 'global-sequence', get(this, 'globalSequence'));
 
-    set(options, 'environment', get(config, 'environment'));
+    set(row, 'name', view);
+    set(row, 'title', title);
 
-    set(options, 'project', get(config, 'APP.name'));
-
-    const v = get(config, 'APP.version').split('+');
-    set(options, 'version', v[0]);
-    set(options, 'hash', v[1]);
-
-    set(options, 'os', get(this, 'browser.info.os'));
-    set(options, 'ip', get(this, 'browser').lookup('ip'));
-
-    set(options, 'browser', get(this, 'browser.info.browser.browserCode'));
-    set(options, 'browser-version', get(this, 'browser.info.browser.version'));
-
-    set(options, 'view-sequence', get(this, 'viewSequence'));
-    set(options, 'global-sequence', get(this, 'globalSequence'));
-
-    return this.send('/views.json', options);
+    return this.send('/sheets/views', row);
   },
-  trackEvent(options = {}) {
+  trackEvent(event, data) {
     window.console.log('Track Event');
 
+    const row = this.baseProperties();
+
     this.incrementProperty('eventSequence');
+    set(row, 'event-sequence', get(this, 'eventSequence'));
+    set(row, 'global-sequence', get(this, 'globalSequence'));
 
-    set(options, 'environment', get(config, 'environment'));
+    set(row, 'name', event);
+    set(row, 'data', data);
 
-    set(options, 'project', get(config, 'APP.name'));
-
-    const v = get(config, 'APP.version').split('+');
-    set(options, 'version', v[0]);
-    set(options, 'hash', v[1]);
-
-    set(options, 'event-sequence', get(this, 'eventSequence'));
-    set(options, 'global-sequence', get(this, 'globalSequence'));
-
-    return this.send('/events.json', options);
+    return this.send('/sheets/events', row);
   },
   send(uri, data) {
-    // const json = JSON.stringify(data);
-    window.console.log(data);
 
-    $.ajax({
+    const url = `${get(this, 'url')}${uri}`;
+
+    return $.ajax({
       type: "POST",
-      url: `${get(this, 'url')}${uri}`,
-      data: JSON.stringify(data),
-      success: () => {
+      url,
+      data,
+      success: (data) => {
         window.console.log('analytics sent');
+        window.console.log(data);
       },
       dataType: 'json'
     });

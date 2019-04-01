@@ -29,12 +29,7 @@ const Router = AddonDocsRouter.extend({
       window.console.log('- afterRender');
       const screen = this.router.currentURL;
       const title = this.router.currentRouteName || 'unknown';
-      get(this, 'analytics').trackView({
-        platform: 'web',
-        screen,
-        userId: null,
-        title
-      });
+      get(this, 'analytics').trackView(screen, title);
     });
   },
   init() {
@@ -46,12 +41,7 @@ const Router = AddonDocsRouter.extend({
       const screen = this.router.currentURL;
       const title = this.router.currentRouteName || 'unknown';
 
-      get(this, 'analytics').trackView({
-        platform: 'web',
-        screen,
-        userId: null,
-        title
-      });
+      get(this, 'analytics').trackView(screen, title);
     });
   }
 });

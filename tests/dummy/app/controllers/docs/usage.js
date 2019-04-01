@@ -12,8 +12,8 @@ export default Controller.extend({
   // Actions
   actions: {
     fireEvent() {
-      get(this, 'analytics').trackEvent({
-        title: 'Usage Event'
+      get(this, 'analytics').trackEvent('Usage Event', {
+        value: 'foo'
       });
     }
   }

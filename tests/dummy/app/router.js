@@ -27,8 +27,8 @@ const Router = AddonDocsRouter.extend({
   _trackPage() {
     scheduleOnce('afterRender', this, () => {
       window.console.log('- afterRender');
-      const screen = this.router.currentURL;
-      const title = this.router.currentRouteName || 'unknown';
+      const screen = get(this, 'router.currentURL');
+      const title = get(this, 'router.currentRouteName') || 'unknown';
       get(this, 'analytics').trackView(screen, title);
     });
   },
@@ -38,8 +38,8 @@ const Router = AddonDocsRouter.extend({
     window.console.log('tak');
     this.on('routeDidChange', () => {
       window.console.log('- routeDidChange');
-      const screen = this.router.currentURL;
-      const title = this.router.currentRouteName || 'unknown';
+      const screen = get(this, 'router.currentURL');
+      const title = get(this, 'router.currentRouteName') || 'unknown';
 
       get(this, 'analytics').trackView(screen, title);
     });

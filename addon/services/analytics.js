@@ -19,6 +19,7 @@ export default Service.extend({
   viewSequence: 0,
   eventSequence: 0,
   user: null,
+  ip: null,
   // Services
   browser: service(),
   cordovaPlatform: service('ember-cordova/platform'),
@@ -52,9 +53,13 @@ export default Service.extend({
   // Methods
   init() {
     this._super(...arguments);
+    // create session hash
     const session = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-
     set(this, 'session', session);
+    // get ip
+    $.getJSON('https://api.ipify.org?format=jsonp&callback=?', (data) => {
+      set(this, 'ip', data.ip);
+    });
   },
   baseProperties() {
     const row = {};
@@ -67,11 +72,11 @@ export default Service.extend({
     set(row, 'hash', v[1]);
     // System setting
     set(row, 'platform', get(this, 'platform'));
-    set(row, 'os', get(this, 'browser.info.os'));
-    set(row, 'ip', null);
+    set(row, 'os', get(this, 'browser.os'));
+    set(row, 'ip', get(this, 'ip'));
     // Browser details
-    set(row, 'browser', get(this, 'browser.info.browser.browserCode'));
-    set(row, 'browser-version', get(this, 'browser.info.browser.version'));
+    set(row, 'browser', get(this, 'browser.browser.browserCode'));
+    set(row, 'browser-version', get(this, 'browser.browser.version'));
     // User details
     set(row, 'session', get(this, 'session'));
     set(row, 'user', get(this, 'user'));

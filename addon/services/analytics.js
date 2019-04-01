@@ -15,7 +15,6 @@ import {
 
 export default Service.extend({
   // Attributes
-  url: 'https://sheetsu.com/apis/v1.0bu/6498441a3194/',
   viewSequence: 0,
   eventSequence: 0,
   user: null,
@@ -24,6 +23,13 @@ export default Service.extend({
   browser: service(),
   cordovaPlatform: service('ember-cordova/platform'),
   // Computed
+  url: computed(function() {
+    const sheet = get(config, 'analyticSauce.sheet');
+    if (!sheet) {
+      throw Error("please set a config value for analyticSauce.sheet");
+    }
+    return `https://sheetsu.com/apis/v1.0bu/${sheet}`;
+  }),
   globalSequence: computed('viewSequence', 'eventSequence', function() {
     return get(this, 'viewSequence') + get(this, 'eventSequence');
   }),

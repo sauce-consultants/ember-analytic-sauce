@@ -22,14 +22,15 @@ module.exports = function(environment) {
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
+    },
+
+    analyticSauce: {
+      sheet: '6498441a3194',
     }
   };
 
 
-  ENV.contentSecurityPolicy = {
-    // ... other stuff here
-    'connect-src': "'self'  'http://freegeoip.net"
-  }
+
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;

@@ -38,6 +38,17 @@ export default Service.extend({
       return 'app';
     }
   }),
+  userAgent: computed(function() {
+    return (navigator.userAgent || navigator.vendor || window.opera);
+  }),
+  iOS: computed('userAgent', function() {
+    const userAgent = this.get('userAgent');
+    return (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i));
+  }),
+  android: computed('userAgent', function() {
+    const userAgent = this.get('userAgent');
+    return (userAgent.match(/Android/i));
+  }),
   // Methods
   init() {
     this._super(...arguments);

@@ -67,6 +67,9 @@ export default Service.extend({
       set(this, 'ip', data.ip);
     });
   },
+  setUser(user) {
+    set(this, 'user', user);
+  },
   baseProperties() {
     const row = {};
     // ember app details

@@ -51,6 +51,7 @@ Router.map(function() {
     this.route('usage');
     this.route('views');
     this.route('events');
+    this.route('user');
   });
 
   this.route('not-found', {

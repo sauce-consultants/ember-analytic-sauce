@@ -1,1 +1,1 @@
-export { default } from 'ember-analytics-sauce/services/analytics';
+export { default } from 'ember-analytic-sauce/services/analytics';

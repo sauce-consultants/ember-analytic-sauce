@@ -23,9 +23,9 @@ export default function() {
 
     http://www.ember-cli-mirage.com/docs/v0.4.x/shorthands/
   */
-  this.passthrough('http://localhost:4204/docs/ember-analytics-sauce.json');
+  this.passthrough('http://localhost:4204/docs/ember-analytic-sauce.json');
   this.passthrough('http://localhost:4204/versions.json');
-  // this.passthrough('ember-analytics-sauce.json');
+  // this.passthrough('ember-analytic-sauce.json');
   // this.passthrough('versions.json');
 
   this.post('/views');

@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-analytics-sauce'
+  name: 'ember-analytic-sauce'
 };

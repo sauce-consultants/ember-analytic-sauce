@@ -1,1 +1,1 @@
-export { default } from 'ember-analytics-sauce/mirage-models/event';
+export { default } from 'ember-analytic-sauce/mirage-models/event';

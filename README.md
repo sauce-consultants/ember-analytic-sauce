@@ -1,11 +1,11 @@
-# ember-analytics-sauce
+# ember-analytic-sauce
 
 This README outlines the details of collaborating on this Ember addon.
 
 ## Installation
 
 * `git clone <repository-url>` this repository
-* `cd ember-analytics-sauce`
+* `cd ember-analytic-sauce`
 * `npm install`
 
 ## Running

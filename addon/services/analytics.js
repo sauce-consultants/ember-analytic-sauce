@@ -9,8 +9,9 @@ import {
   get,
   set,
 } from '@ember/object';
-import Ember from 'ember';
-
+import {
+  not
+} from '@ember/object/computed';
 
 export default Service.extend({
   // Attributes
@@ -20,9 +21,22 @@ export default Service.extend({
   user: null,
   // Services
   browser: service(),
+  cordovaPlatform: service('ember-cordova/platform'),
   // Computed
   globalSequence: computed('viewSequence', 'eventSequence', function() {
     return get(this, 'viewSequence') + get(this, 'eventSequence');
+  }),
+  isWeb: computed('cordovaPlatform.isCordova', function() {
+    return !this.get('cordovaPlatform.isCordova');
+  }),
+  isApp: not('isWeb'),
+  platform: computed('isWeb', 'isApp', function() {
+    if (get(this, 'isWeb')) {
+      return 'web';
+    }
+    if (get(this, 'isWeb')) {
+      return 'app';
+    }
   }),
   // Methods
   init() {
@@ -41,8 +55,9 @@ export default Service.extend({
     set(row, 'version', v[0]);
     set(row, 'hash', v[1]);
     // System setting
+    set(row, 'platform', get(this, 'platform'));
     set(row, 'os', get(this, 'browser.info.os'));
-    set(row, 'ip', null); //get(this, 'browser').lookup('ip'));
+    set(row, 'ip', null);
     // Browser details
     set(row, 'browser', get(this, 'browser.info.browser.browserCode'));
     set(row, 'browser-version', get(this, 'browser.info.browser.version'));

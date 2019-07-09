@@ -17,7 +17,7 @@ To track page views in ember add the following code to `app/router.js`.
       scheduleOnce('afterRender', this, () => {
         const screen = get(this, 'router.currentURL');
         const title = get(this, 'router.currentRouteName') || 'unknown';
-        get(this, 'analytics').trackView(screen, title);
+        get(this, 'analytics').trackVisit(screen, title);
       });
     },
   });

@@ -24,11 +24,11 @@ export default Service.extend({
   cordovaPlatform: service('ember-cordova/platform'),
   // Computed
   url: computed(function() {
-    const sheet = get(config, 'analyticSauce.sheet');
-    if (!sheet) {
-      throw Error("please set a config value for analyticSauce.sheet");
-    }
-    return `https://sheetsu.com/apis/v1.0bu/${sheet}`;
+    // const sheet = get(config, 'analyticSauce.sheet');
+    // if (!sheet) {
+    //   throw Error("please set a config value for analyticSauce.sheet");
+    // }
+    return `http://192.168.1.190:8000`;
   }),
   globalSequence: computed('viewSequence', 'eventSequence', function() {
     return get(this, 'viewSequence') + get(this, 'eventSequence');
@@ -62,10 +62,6 @@ export default Service.extend({
     // create session hash
     const session = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
     set(this, 'session', session);
-    // get ip
-    $.getJSON('https://api.ipify.org?format=jsonp&callback=?', (data) => {
-      set(this, 'ip', data.ip);
-    });
   },
   setUser(user) {
     set(this, 'user', user);
@@ -74,66 +70,60 @@ export default Service.extend({
     const row = {};
     // ember app details
     set(row, 'environment', get(config, 'environment'));
-    set(row, 'project', get(config, 'APP.name'));
+    set(row, 'appName', get(config, 'APP.name'));
     // package version
     const v = get(config, 'APP.version').split('+');
-    set(row, 'version', v[0]);
-    set(row, 'hash', v[1]);
+    set(row, 'appVersion', v[0]);
+    set(row, 'appHash', v[1]);
     // System setting
-    set(row, 'platform', get(this, 'platform'));
-    set(row, 'os', get(this, 'browser.os'));
-    set(row, 'ip', get(this, 'ip'));
-    // Browser details
-    set(row, 'browser', get(this, 'browser.browser.browserCode'));
-    set(row, 'browser-version', get(this, 'browser.browser.version'));
+    set(row, 'userAgent', window.navigator.userAgent);
     // User details
-    set(row, 'session', get(this, 'session'));
-    set(row, 'user', get(this, 'user'));
-    // date
-    const date = new Date();
-    set(row, 'date', date.toISOString());
+    set(row, 'sessionId', get(this, 'session'));
+    set(row, 'userId', get(this, 'user'));
     return row;
   },
-  trackView(view, title) {
-    window.console.log('Track View');
+  trackVisit(view, title) {
+    // window.console.log('Track View');
 
     const row = this.baseProperties();
 
     this.incrementProperty('viewSequence');
-    set(row, 'view-sequence', get(this, 'viewSequence'));
-    set(row, 'global-sequence', get(this, 'globalSequence'));
+    set(row, 'viewSequence', get(this, 'viewSequence'));
+    set(row, 'globalSequence', get(this, 'globalSequence'));
 
     set(row, 'name', view);
     set(row, 'title', title);
 
-    return this.send('/sheets/views', row);
+    return this.send('/visits', row);
   },
   trackEvent(event, data) {
-    window.console.log('Track Event');
+    // window.console.log('Track Event');
 
     const row = this.baseProperties();
 
     this.incrementProperty('eventSequence');
-    set(row, 'event-sequence', get(this, 'eventSequence'));
-    set(row, 'global-sequence', get(this, 'globalSequence'));
+    set(row, 'eventSequence', get(this, 'eventSequence'));
+    set(row, 'globalSequence', get(this, 'globalSequence'));
 
     set(row, 'name', event);
     set(row, 'data', data);
 
-    return this.send('/sheets/events', row);
+    return this.send('/events', row);
   },
   send(uri, data) {
 
     const url = `${get(this, 'url')}${uri}`;
 
+    data = JSON.stringify(data);
+
     return $.ajax({
       type: "POST",
       url,
       data,
-      success: (data) => {
-        window.console.log('analytics sent');
-        window.console.log(data);
-      },
+      // success: (data) => {
+      //   window.console.log('analytics sent');
+      //   window.console.log(data);
+      // },
       dataType: 'json'
     });
   }

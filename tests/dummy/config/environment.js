@@ -24,10 +24,14 @@ module.exports = function(environment) {
       // when it is created
     },
 
-    analyticSauce: {
-      sheet: '6498441a3194',
-    }
+
   };
+
+  // ENV['analytics-sauce'] = {
+  //   apiUrl: 'http://analytics.sauce.construction',
+  //   environments: ['development', 'staging', 'production'],
+  //   debug: true,
+  // }
 
 
 

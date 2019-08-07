@@ -13,6 +13,7 @@ import {
   not
 } from '@ember/object/computed';
 
+
 export default Service.extend({
   // Attributes
   viewSequence: 0,
@@ -24,11 +25,11 @@ export default Service.extend({
   cordovaPlatform: service('ember-cordova/platform'),
   // Computed
   url: computed(function() {
-    // const sheet = get(config, 'analyticSauce.sheet');
-    // if (!sheet) {
-    //   throw Error("please set a config value for analyticSauce.sheet");
-    // }
-    return `http://192.168.1.190:8000`;
+    const url = get(config, 'analytics-sauce.apiUrl');
+    if (!url) {
+      throw Error("please set a config value for analytics-sauce.apiUrl");
+    }
+    return url;
   }),
   globalSequence: computed('viewSequence', 'eventSequence', function() {
     return get(this, 'viewSequence') + get(this, 'eventSequence');
@@ -83,7 +84,8 @@ export default Service.extend({
     return row;
   },
   trackVisit(view, title) {
-    // window.console.log('Track View');
+
+    this.log('Track View');
 
     const row = this.baseProperties();
 
@@ -97,7 +99,7 @@ export default Service.extend({
     return this.send('/visits', row);
   },
   trackEvent(event, data) {
-    // window.console.log('Track Event');
+    this.log('Track Event');
 
     const row = this.baseProperties();
 
@@ -116,15 +118,33 @@ export default Service.extend({
 
     data = JSON.stringify(data);
 
-    return $.ajax({
-      type: "POST",
-      url,
-      data,
-      // success: (data) => {
-      //   window.console.log('analytics sent');
-      //   window.console.log(data);
-      // },
-      dataType: 'json'
-    });
+    if (this.shouldSendData()) {
+
+      return $.ajax({
+        type: "POST",
+        url,
+        data,
+        success: (data) => {
+          this.log('analytics sent', data);
+        },
+        dataType: 'json'
+      });
+    } else {
+      this.log(url, data);
+    }
+  },
+  shouldSendData() {
+    const currentEnv = config.environment,
+      activeEnvs = get(config, 'analytics-sauce.environments');
+
+    if (activeEnvs) {
+      return activeEnvs.indexOf(currentEnv) !== -1;
+    }
+    return false;
+  },
+  log(...args) {
+    if (get(config, 'analytics-sauce.debug')) {
+      window.console.log(...args);
+    }
   }
 });

@@ -1,26 +1,88 @@
 # ember-analytic-sauce
 
-This README outlines the details of collaborating on this Ember addon.
+[Short description of the addon.]
+
+## Compatibility
+
+- Ember.js v3.16 or above
+- Ember CLI v2.13 or above
+- Node.js v10 or above
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd ember-analytic-sauce`
-* `npm install`
+```
+ember install ember-analytic-sauce
+```
 
-## Running
+## Usage
 
-* `ember serve`
-* Visit your app at [http://localhost:4200](http://localhost:4200).
+### Track screen views
 
-## Running Tests
+```
+import Route from '@ember/routing/route';
+import {inject as service} from '@ember/service';
+import config from '../config/environment';
 
-* `npm test` (Runs `ember try:each` to test your addon against multiple Ember versions)
-* `ember test`
-* `ember test --server`
+export default class ApplicationRoute extends Route {
+  constructor() {
+    super(...arguments);
 
-## Building
+    // Setup event to track views on route change
 
-* `ember build`
+    if (config.environment !== 'test') {
+      // This event fires our view request on every route change
+      this.router.on('routeDidChange', (transition) => {
+        // generate URL for path property
+        // const path = getUrlFromTransition(transition, this.routing);
+        // get name of the route
+        // const name = transition.to.name;
 
-For more information on using ember-cli, visit [https://ember-cli.com/](https://ember-cli.com/).
+        // get URL for path property
+        const path = this.router.currentURL;
+        // get name of the route
+        const name = this.router.currentRouteName || 'unknown';
+
+        // get user id - example is using ember-simple-auth
+        const userId = this.session.data.authenticated.data.id;
+
+        // if logged in - set the user id
+        if (userId) {
+          this.analytics.setUser(userId);
+        }
+
+        // track visit
+        this.analytics.trackVisit(path, name);
+      });
+    }
+  }
+}
+```
+
+### Track events
+
+example of tracking an event in a controllers action
+
+```
+import Controller from '@ember/controller';
+import {action} from '@ember/object';
+import {inject as service} from '@ember/service';
+
+export default class ThingController extends Controller {
+
+    @service() analytics;
+
+    @action doThing() {
+        this.analytics.trackEvent('my.event', {
+            some:'data'
+        });
+    }
+}
+```
+
+## Contributing
+
+See the [Contributing](CONTRIBUTING.md) guide for details.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE.md).

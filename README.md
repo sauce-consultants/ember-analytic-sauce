@@ -16,6 +16,15 @@ ember install ember-analytic-sauce
 
 ## Usage
 
+### Set App's name
+This will set your app's name so that the analytics recorded are separate, in the case that your app is re-used for different projects.
+
+```
+this.analytics.setAppName("your-app-name")
+```
+
+Not setting this will mean your app's default name set in package.json will be used instead.
+
 ### Track screen views
 
 ```
@@ -26,6 +35,9 @@ import config from '../config/environment';
 export default class ApplicationRoute extends Route {
   constructor() {
     super(...arguments);
+
+    // Override default app name
+    // this.analytics.setAppName("your-app-name")
 
     // Setup event to track views on route change
 

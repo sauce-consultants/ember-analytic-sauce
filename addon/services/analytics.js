@@ -63,11 +63,14 @@ export default Service.extend({
   setUser(user) {
     set(this, "user", user);
   },
+  setAppName(name) {
+    set(this, "appName", name);
+  },
   baseProperties() {
     const row = {};
     // ember app details
     set(row, "environment", get(config, "environment"));
-    set(row, "appName", get(config, "APP.name"));
+    set(row, "appName", this.get("appName") || get(config, "APP.name"));
     // package version
     const v = get(config, "APP.version").split("+");
     set(row, "appVersion", v[0]);

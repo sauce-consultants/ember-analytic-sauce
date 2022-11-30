@@ -80,6 +80,7 @@ export default Service.extend({
     // User details
     set(row, "sessionId", get(this, "session"));
     set(row, "userId", get(this, "user"));
+    set(row, "flavor", get(config, "flavor"));
     return row;
   },
   trackVisit(view, title) {

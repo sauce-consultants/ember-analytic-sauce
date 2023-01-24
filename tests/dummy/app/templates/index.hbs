@@ -1,10 +1,6 @@
-{{docs-header}}
+<DocsHeader />
 
-{{docs-hero
-  logo='ember'
-  slimHeading='Analytics'
-  strongHeading='Sauce'
-  byline='My addon demo/marketing page.'}}
+<DocsHero @logo="ember" @slimHeading="Analytics" @strongHeading="Sauce" @byline="My addon demo/marketing page." />
 
   <div class="home">
     <div class="home__section">
@@ -29,7 +25,7 @@
     </div>
 
     <div class="home__cta">
-      {{link-to "Read the docs" "docs"}}
+      <LinkTo @route="docs">Read the docs</LinkTo>
     </div>
 
   </div>

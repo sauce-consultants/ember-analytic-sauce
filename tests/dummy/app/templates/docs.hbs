@@ -1,16 +1,16 @@
-{{docs-header}}
+<DocsHeader />
 
-{{#docs-viewer as |viewer|}}
-  {{#viewer.nav as |nav|}}
+<DocsViewer as |viewer|>
+  <viewer.nav as |nav|>
     {{nav.item 'What is Analytic Sauce' 'docs.index'}}
     {{nav.item 'Usage' 'docs.usage'}}
     {{nav.item 'Views' 'docs.views'}}
     {{nav.item 'Events' 'docs.events'}}
     {{nav.item 'Users' 'docs.user'}}
     {{nav.item 'Config' 'docs.config'}}
-  {{/viewer.nav}}
+  </viewer.nav>
 
-  {{#viewer.main}}
+  <viewer.main>
     {{outlet}}
-  {{/viewer.main}}
-{{/docs-viewer}}
+  </viewer.main>
+</DocsViewer>

@@ -22,17 +22,17 @@ export default Service.extend({
     return url;
   }),
   globalSequence: computed("viewSequence", "eventSequence", function () {
-    return get(this, "viewSequence") + get(this, "eventSequence");
+    return this.viewSequence + this.eventSequence;
   }),
   isWeb: computed("cordovaPlatform.isCordova", function () {
     return !this.get("cordovaPlatform.isCordova");
   }),
   isApp: not("isWeb"),
   platform: computed("isWeb", "isApp", function () {
-    if (get(this, "isWeb")) {
+    if (this.isWeb) {
       return "web";
     }
-    if (get(this, "isWeb")) {
+    if (this.isWeb) {
       return "app";
     }
   }),
@@ -40,15 +40,13 @@ export default Service.extend({
     return navigator.userAgent || navigator.vendor || window.opera;
   }),
   iOS: computed("userAgent", function () {
-    const userAgent = this.get("userAgent");
-    return (
-      userAgent.match(/iPad/i) ||
-      userAgent.match(/iPhone/i) ||
-      userAgent.match(/iPod/i)
-    );
+    const userAgent = this.userAgent;
+    return userAgent.match(/iPad/i) ||
+    userAgent.match(/iPhone/i) ||
+    userAgent.match(/iPod/i);
   }),
   android: computed("userAgent", function () {
-    const userAgent = this.get("userAgent");
+    const userAgent = this.userAgent;
     return userAgent.match(/Android/i);
   }),
   // Methods
@@ -70,7 +68,7 @@ export default Service.extend({
     const row = {};
     // ember app details
     set(row, "environment", get(config, "environment"));
-    set(row, "appName", this.get("appName") || get(config, "APP.name"));
+    set(row, "appName", this.appName || get(config, "APP.name"));
     // package version
     const v = get(config, "APP.version").split("+");
     set(row, "appVersion", v[0]);
@@ -78,8 +76,8 @@ export default Service.extend({
     // System setting
     set(row, "userAgent", window.navigator.userAgent);
     // User details
-    set(row, "sessionId", get(this, "session"));
-    set(row, "userId", get(this, "user"));
+    set(row, "sessionId", this.session);
+    set(row, "userId", this.user);
     return row;
   },
   trackVisit(view, title) {
@@ -88,8 +86,8 @@ export default Service.extend({
     const row = this.baseProperties();
 
     this.incrementProperty("viewSequence");
-    set(row, "viewSequence", get(this, "viewSequence"));
-    set(row, "globalSequence", get(this, "globalSequence"));
+    set(row, "viewSequence", this.viewSequence);
+    set(row, "globalSequence", this.globalSequence);
 
     set(row, "name", view);
     set(row, "title", title);
@@ -102,8 +100,8 @@ export default Service.extend({
     const row = this.baseProperties();
 
     this.incrementProperty("eventSequence");
-    set(row, "eventSequence", get(this, "eventSequence"));
-    set(row, "globalSequence", get(this, "globalSequence"));
+    set(row, "eventSequence", this.eventSequence);
+    set(row, "globalSequence", this.globalSequence);
 
     set(row, "name", event);
     set(row, "data", data);
@@ -111,7 +109,7 @@ export default Service.extend({
     return this.send("/events", row);
   },
   send(uri, data) {
-    const url = `${get(this, "url")}${uri}`;
+    const url = `${this.url}${uri}`;
 
     data = JSON.stringify(data);
 

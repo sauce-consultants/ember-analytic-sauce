@@ -12,7 +12,7 @@ export default Component.extend({
   // Actions
   actions: {
     fireEvent() {
-      get(this, 'analytics').trackEvent('Usage Event', {
+      this.analytics.trackEvent('Usage Event', {
         value: 'foo'
       });
     }

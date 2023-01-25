@@ -1,6 +1,0 @@
-2023-01-24T15:00:15.931Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs
-2023-01-24T15:00:15.931Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs
-2023-01-24T15:00:15.931Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs
-2023-01-24T15:00:15.931Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs
-2023-01-24T15:00:15.931Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs
-2023-01-24T15:00:15.932Z [warn] WARNING: {{nav.item}} was not converted as it has positional parameters which can't be automatically converted. Source: tests/dummy/app/templates/docs.hbs

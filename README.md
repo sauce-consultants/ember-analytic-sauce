@@ -2,13 +2,11 @@
 
 [Short description of the addon.]
 
-
 ## Compatibility
 
-* Ember.js v3.28 or above
-* Ember CLI v3.28 or above
-* Node.js v14 or above
-
+- Ember.js v3.28 or above
+- Ember CLI v3.28 or above
+- Node.js v14 or above
 
 ## Installation
 
@@ -16,80 +14,142 @@
 ember install ember-analytic-sauce
 ```
 
+## Config
+
+This application has a few config options you can set in your `config/environment.js` file
+
+```
+/// ...
+ENV['analytics-sauce'] = {
+    apiUrl: 'https://analytics.sauce.construction',
+    environments: ['development', 'staging', 'production'],
+    debug: true,
+};
+```
+
+| name         | type   | description                                                 |
+| ------------ | ------ | ----------------------------------------------------------- |
+| apiUrl       | string | The analytics api to send requests to                       |
+| environments | array  | Array of environments to send analytics                     |
+| debug        | true   | If set to true analytics data will be logged to the console |
+
 ## Usage
 
-### Set App's name
-This will set your app's name so that the analytics recorded are separate, in the case that your app is re-used for different projects.
+### Track app views
 
-```
-this.analytics.setAppName("your-app-name")
-```
-
-Not setting this will mean your app's default name set in package.json will be used instead.
-
-### Track screen views
+Update your `app/routes/application.js` to track each time your user hits any route in the app
 
 ```
 import Route from '@ember/routing/route';
-import {inject as service} from '@ember/service';
-import config from '../config/environment';
+import { inject as service } from '@ember/service';
 
 export default class ApplicationRoute extends Route {
+  // Services
+
+  @service() analytics;
+  @service() router;
+
+  // Methods
+
   constructor() {
     super(...arguments);
 
-    // Override default app name
-    // this.analytics.setAppName("your-app-name")
-
     // Setup event to track views on route change
 
-    if (config.environment !== 'test') {
-      // This event fires our view request on every route change
-      this.router.on('routeDidChange', (transition) => {
-        // generate URL for path property
-        // const path = getUrlFromTransition(transition, this.routing);
+    // This event fires our view request on every route change
+    this.router.on('routeDidChange', (/*transition*/) => {
+      // get URL for path property
+      const path = this.router.currentURL,
         // get name of the route
-        // const name = transition.to.name;
+        name = this.router.currentRouteName || 'unknown';
 
-        // get URL for path property
-        const path = this.router.currentURL;
-        // get name of the route
-        const name = this.router.currentRouteName || 'unknown';
+      this.analytics.setUser(42);
 
-        // get user id - example is using ember-simple-auth
-        const userId = this.session.data.authenticated.data.id;
-
-        // if logged in - set the user id
-        if (userId) {
-          this.analytics.setUser(userId);
-        }
-
-        // track visit
-        this.analytics.trackVisit(path, name);
-      });
-    }
+      // track visit
+      this.analytics.trackVisit(path, name);
+    });
   }
 }
 ```
 
-### Track events
+### Track app events
 
-example of tracking an event in a controllers action
+To track events you will can inject the analytics service into your controller/service/component/route when appropriate
 
 ```
 import Controller from '@ember/controller';
-import {action} from '@ember/object';
-import {inject as service} from '@ember/service';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
 
 export default class ThingController extends Controller {
+  // Service
 
-    @service() analytics;
+  @service analytics;
 
-    @action doThing() {
-        this.analytics.trackEvent('my.event', {
-            some:'data'
-        });
-    }
+  // Actions
+  @action hitIt(thing) {
+    this.analytics.trackEvent('hit.thing', { id: thing });
+  }
+}
+```
+
+### Set user
+
+To set some user indentifiable data you can call setUser on the analytics service.
+
+Ensure this method is called everytime the user refreshes the app.
+
+```
+import Controller from '@ember/controller';
+import { action } from '@ember/object';
+import { inject as service } from '@ember/service';
+
+export default class LoginController extends Controller {
+  // Service
+
+  @service analytics;
+
+  // Actions
+  @action login(user) {
+
+    // ...
+
+    this.analytics.setUser(user.uuid);
+  }
+}
+```
+
+### Set app name
+
+By default this package will use the name in package.json as the appName. If you want to override this you can call the `setAppName` method.
+
+```
+export default class ApplicationRoute extends Route {
+
+    // ... in routeDidChange
+    this.analytics.setAppName('myAppThing);
+
+}
+```
+
+### Customise other data
+
+There is also a more generic `setData` method to override any of the generic analytics data that is sent to the api.
+
+```
+export default class ApplicationRoute extends Route {
+
+    // ... in routeDidChange
+    this.analytics.setData({
+        environment:'foo',
+        appName: 'myAppThing'
+        appVersion: '1.0.2b',
+        appHash:'bash',
+        userAgent:'iOS 16.3.2',
+        sessionId:'a4sf43v0s',
+        userId:42
+    });
+
 }
 ```
 

@@ -1,31 +1,10 @@
-<DocsHeader />
+{{page-title "Home"}}
 
-<DocsHero @logo="ember" @slimHeading="Analytics" @strongHeading="Sauce" @byline="My addon demo/marketing page." />
+<h1>Home Page</h1>
 
-  <div class="home">
-    <div class="home__section">
-      <h2>Data</h2>
-      <p class="home__lead">
-        Collect all the things all the time. Data is stored in google big data and can be filtered by app, version and environment.
-      </p>
-    </div>
-
-    <div class="home__section">
-      <h2>Privacy</h2>
-      <p class="home__lead">
-        Hosted on our own api, immune to adblockers
-      </p>
-    </div>
-
-    <div class="home__section">
-      <h2>Don't be creepy</h2>
-      <p class="home__lead">
-        Anonomize data and only store screen views and event data.
-      </p>
-    </div>
-
-    <div class="home__cta">
-      <LinkTo @route="docs">Read the docs</LinkTo>
-    </div>
-
-  </div>
+<ul>
+  <li><LinkTo @route="thing" @model={{1}}>Thing: 1</LinkTo></li>
+  <li><LinkTo @route="thing" @model={{2}}>Thing: 2</LinkTo></li>
+  <li><LinkTo @route="thing" @model={{3}}>Thing: 3</LinkTo></li>
+  <li><LinkTo @route="thing" @model={{4}}>Thing: 4</LinkTo></li>
+</ul>

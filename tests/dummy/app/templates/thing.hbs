@@ -1,0 +1,20 @@
+{{page-title "Home"}}
+
+<h1>Thing {{this.model}}</h1>
+
+<LinkTo @route="index">Back to Home</LinkTo>
+
+<p>Phasellus iaculis bibendum mi, vel pretium dolor sodales in. Aliquam
+  facilisis consectetur molestie. Curabitur id nulla id nulla euismod rhoncus
+  fermentum et augue. Curabitur sit amet dolor gravida, tincidunt tellus vitae,
+  tristique sem. Proin aliquam congue pulvinar. Integer magna turpis, aliquet
+  vestibulum libero at, egestas lobortis tortor. Curabitur nunc urna, fringilla
+  ac rutrum sed, malesuada quis lacus. Suspendisse congue dignissim urna, vitae
+  sodales velit sagittis vel. In non convallis nisl, sed rutrum tellus.
+  Pellentesque massa tortor, rutrum et lorem a, efficitur ultrices urna. Nulla
+  ornare tellus orci, eget porta turpis blandit et. Suspendisse imperdiet rutrum
+  arcu, in pretium eros vehicula in. Sed felis neque, cursus a consequat quis,
+  facilisis lacinia felis. Donec ornare nunc quis massa eleifend ultricies.
+  Donec sed pharetra risus, eu sollicitudin ligula.</p>
+
+<button type="button" {{on "click" (fn this.hitIt this.model)}}>Hit Me</button>

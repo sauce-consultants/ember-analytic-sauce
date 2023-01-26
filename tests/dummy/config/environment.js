@@ -1,40 +1,30 @@
 'use strict';
 
-module.exports = function(environment) {
-  let ENV = {
+module.exports = function (environment) {
+  const ENV = {
     modulePrefix: 'dummy',
     environment,
     rootURL: '/',
-    rootApiURL: 'http://localhost:4000',
-    apiNamespace: 'api/v1',
-    locationType: 'auto',
+    locationType: 'history',
     EmberENV: {
+      EXTEND_PROTOTYPES: false,
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
     },
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
     },
-
-
   };
 
-  // ENV['analytics-sauce'] = {
-  //   apiUrl: 'http://analytics.sauce.construction',
-  //   environments: ['development', 'staging', 'production'],
-  //   debug: true,
-  // }
-
-
-
+  ENV['analytics-sauce'] = {
+    apiUrl: 'https://analytics.sauce.construction',
+    environments: ['development', 'staging', 'production'],
+    debug: true,
+  };
 
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
@@ -42,10 +32,6 @@ module.exports = function(environment) {
     // ENV.APP.LOG_TRANSITIONS = true;
     // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
     // ENV.APP.LOG_VIEW_LOOKUPS = true;
-
-    ENV['ember-cli-mirage'] = {
-      enabled: false
-    };
   }
 
   if (environment === 'test') {
@@ -58,12 +44,13 @@ module.exports = function(environment) {
 
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+
+    ENV['analytics-sauce'].debug = false;
   }
 
   if (environment === 'production') {
-    // Allow ember-cli-addon-docs to update the rootURL in compiled assets
-    ENV.rootURL = 'ADDON_DOCS_ROOT_URL';
     // here you can enable a production-specific feature
   }
+
   return ENV;
 };
